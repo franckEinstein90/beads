@@ -103,7 +103,7 @@ const scene = (function (){
      }
 
      let clickEvent = function( event ){
-        //event.preventDefault()
+        event.preventDefault()
         _mouse.x = ( event.clientX / _container.clientWidth) * 2 - 1
         _mouse.y = -( event.clientY / _container.clientHeight) * 2 + 1
         _rayCaster.setFromCamera(_mouse, _camera)
@@ -131,7 +131,7 @@ const scene = (function (){
         scene.initLights()
         initBalls()
         scene.render()
-        _container.onmousedown = clickEvent
+        //_container.onmousedown = clickEvent
 
      }, 
 
