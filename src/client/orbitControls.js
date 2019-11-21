@@ -6,6 +6,7 @@
  * @author erich666 / http://erichaines.com
  * @author ScieCode / http://github.com/sciecode
  */
+
 "use strict"
 const   THREE = require('three')
 const	EventDispatcher = THREE.EventDispatcher
@@ -23,7 +24,7 @@ const	Vector3 = THREE.Vector3
 //    Zoom - middle mouse, or mousewheel / touch: two-finger spread or squish
 //    Pan - right mouse, or left mouse + ctrl/meta/shiftKey, or arrow keys / touch: two-finger move
 
-var OrbitControls = function ( object, domElement ) {
+const OrbitControls = function ( object, domElement ) {
 
 	if ( domElement === undefined ) console.warn( 'THREE.OrbitControls: The second parameter "domElement" is now mandatory.' );
 	if ( domElement === document ) console.error( 'THREE.OrbitControls: "document" should not be used as the target "domElement". Please use "renderer.domElement" instead.' );
@@ -47,7 +48,7 @@ var OrbitControls = function ( object, domElement ) {
 
 	// How far you can orbit vertically, upper and lower limits.
 	// Range is 0 to Math.PI radians.
-	this.minPolarAngle = 0; // radians
+	this.minPolarAngle = Math.PI/10; // radians
 	this.maxPolarAngle = Math.PI/2; // radians
 
 	// How far you can orbit horizontally, upper and lower limits.
