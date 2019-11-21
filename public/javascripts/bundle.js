@@ -51290,17 +51290,18 @@ const shapes = (function(){
 
 
 const Ball = function(scene, coords){
+   this.coords = coords
    this.threeObj = shapes.makeBall(scene, coords) 
 }
+
 
 const Connection = function(scene, ball1, ball2){
     this.origin = ball1
     this.target = ball2
     let geometry = new THREE.Geometry();
     geometry.vertices.push(
-        new THREE.Vector3( 10, 30, 10 ),
-        new THREE.Vector3( 10, 50, 30 ),
-        new THREE.Vector3( 10, 30, 50 )
+        new THREE.Vector3( ball1.coords.x, ball1.coords.y, ball1.coords.z),
+        new THREE.Vector3( ball2.coords.x, ball2.coords.y, ball2.coords.z)
     )
     let material = new THREE.LineBasicMaterial({
         color: 0x0000ff
@@ -51313,13 +51314,14 @@ const scene = (function (){
 
     let _scene = new THREE.Scene()
     _scene.background = new THREE.Color( 'skyblue' )
-    _scene.add( new THREE.AmbientLight( 0xf0f0f0 ))
+    _scene.add( new THREE.AmbientLight( 0xf0f0f0 ) )
 
-    let _renderer= new THREE.WebGLRenderer( {antialias: true} )
+    let _renderer  = new THREE.WebGLRenderer( {antialias: true} )
+    let _rayCaster = new THREE.Raycaster()
     let _container = null
     let _camera = null
     let _cameraControls = null
-
+    let _mouse = new THREE.Vector2()
     
     let initPlane =  function(){
 
@@ -51338,16 +51340,37 @@ const scene = (function (){
         _scene.add( plane ) 
      }
     let initCamera = function(){
-        _camera = new THREE.PerspectiveCamera(
-            60, 
-            _container.clientWidth / _container.clientHeight, 1, 10000)
+        _camera = new THREE.PerspectiveCamera( 60, _container.clientWidth / _container.clientHeight, 1, 10000)
         _camera.position.set( 100, 100, 100)
         _camera.lookAt(0,0,0)
         _cameraControls = new OrbitControls( _camera, _renderer.domElement)
         _cameraControls.addEventListener('change', scene.render)
            
+     } 
+     let initBalls = function(){
+        let ball1 = new Ball(_scene,  {x:-10, y:10, z:10})
+        let ball2 = new Ball(_scene, {x:10, y:30, z:10})
+        let connection12 = new Connection(_scene, ball1, ball2)
+        let ball3 = new Ball(_scene, {x:30, y:10, z: 10}) 
+        let connection32 = new Connection(_scene, ball3, ball2)
+        let ball4 = new Ball(_scene, {x: 10, y: 50, z: 30})
+        let ball5 = new Ball(_scene, {x:10, y:30,z:50})
+        let connection45 = new Connection(_scene, ball4, ball5)
      }
 
+     let clickEvent = function( event ){
+        //event.preventDefault()
+        _mouse.x = ( event.clientX / _container.clientWidth) * 2 - 1
+        _mouse.y = -( event.clientY / _container.clientHeight) * 2 + 1
+        _rayCaster.setFromCamera(_mouse, _camera)
+        let intersects = _rayCaster.intersectObjects( _scene.children )
+        if ( intersects.length > 0 ){
+            alert('he ther')
+        }
+        let evt = document.createEvent("MouseEvents")
+        evt.initEvent('mouseup', true, true)
+        _container.dispatchEvent(evt)        
+     }
    
    return{
 
@@ -51357,40 +51380,16 @@ const scene = (function (){
         _renderer.setPixelRatio( window.devicePixelRatio ) 
         _renderer.shadowMap.enabled = true
         _container.appendChild( _renderer.domElement )
+        _rayCaster = new THREE.Raycaster()
 
         initCamera()
         initPlane()
-        scene.initGrid()
         scene.initLights()
+        initBalls()
         scene.render()
+        _container.onmousedown = clickEvent
+
      }, 
-
-     
-     initGrid: function(){
-      
-        let material = new THREE.LineBasicMaterial({
-            color: 0x0000ff
-         })
-
-        let geometry = new THREE.Geometry();
-        geometry.vertices.push(
-         new THREE.Vector3( -10, 10, 10 ),
-         new THREE.Vector3( 10, 30, 10 ),
-         new THREE.Vector3( 30, 10, 10 )
-        )
-        let line = new THREE.Line( geometry, material );
-        _scene.add( line );
-
-
-     
-      shapes.makeGroup(_scene, {x:-10, y:10, z:10}, 
-                               {x:10, y:30, z:10}, 
-                               {x:30, y:10, z: 10}) 
-
-      let ball4 = new Ball(_scene, {x: 10, y: 50, z: 30})
-      let ball5 = new Ball(_scene, {x:10, y:30,z:50})
-      let connection45 = new Connection(_scene, ball4, ball5)
-      }, 
 
      initLights: function( ){
         let ambientLight, directionalLight 
@@ -51405,6 +51404,23 @@ const scene = (function (){
      }, 
 
      render: function(){
+
+        if( this.intersectedObject === undefined ){
+            this.intersectedObject = null
+        }
+
+        /*_rayCaster.setFromCamera( _mouse, _camera )
+        let intersects = _rayCaster.intersectObjects( _scene.children )
+        if ( intersects.length === 0 ){
+            _renderer.render(_scene, _camera)
+            return 
+        }
+        if (this.intersectedObject === intersects[0].object){
+             _renderer.render(_scene, _camera)
+            return 
+        }
+        this.intersectedObject = intersects[0].object
+        alert('hit something')*/
         _renderer.render(_scene, _camera)
      }
    }
