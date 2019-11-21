@@ -1,4 +1,4 @@
-# plug
+# Beads
 
 The programming industry has been relying on the same IDE model for...ever. Text editors, and multiple screens. Programmers don't code on the go, because there are no IDE adapated for that. Introducing Beads
 
