@@ -1,10 +1,17 @@
 "use strict"
-const scene = require('./scene').scene
+
+const workspace = require('./workspace').workspace
 
 
 $(function(){
-      scene.init()
-      scene.render()
-  
-}); 
+      let appStatus = null
+      try{
+            appStatus = workspace.init()
+      }catch (err){
+            appStatus = false
+      }
+      if(appStatus){
+          workspace.render()
+      }
+}) 
 
