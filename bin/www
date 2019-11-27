@@ -3,6 +3,7 @@
 /**
  * Module dependencies.
  */
+require('module-alias/register')
 
 var app = require('../app');
 var debug = require('debug')('plug:server');
