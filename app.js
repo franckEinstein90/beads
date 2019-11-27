@@ -40,7 +40,14 @@ const types = [
 ]
 
 const prog = new systemF.Program()
+let initProg = function(){
+  types.forEach( ty => {
+    systemF.addType(ty.signatureDescription, ty.htmlID, ty.color)
+    systemF.addPugs(ty.signatureDescription, ty.pugs)
+  })
+}
 
+initProg()
 let initApp = function(){
 // view engine setup
     app.set('views', path.join(__dirname, 'views'));

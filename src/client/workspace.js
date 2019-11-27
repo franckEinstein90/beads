@@ -57,6 +57,7 @@ const Connection = function(scene, ball1, ball2) {
     scene.add(line)
 }
 
+
 const prog = (function() {
     let _scene = null
     let programRoot = null
