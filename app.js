@@ -1,5 +1,19 @@
+/******************************************************************************
+ * beads
+ * by
+ *  - FranckEinstein90
+ *  **************************************************************************/
+
 var createError = require('http-errors');
-var express = require('express');
+
+
+//express set up
+const express = require('express')
+const session = require('express-session')
+
+
+
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -9,9 +23,19 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+const viewSystem = require('@server/views/views.js').viewSystem
+viewSystem.configure(__dirname, app)
+
+const setUserSessionSystem = function(){
+    app.use( session ({
+        secret: 'whatdafuckisthat', 
+        cookie: {
+            maxAge: 50 * 40 * 100
+        }   
+    }))
+}
+
+setUserSessionSystem()
 
 app.use(logger('dev'));
 app.use(express.json());
