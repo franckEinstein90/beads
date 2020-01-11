@@ -6,7 +6,9 @@
     "start": "nodemon ./bin/www"
   },
   "_moduleAliases": {
-    "@server": "src/server"
+    "@server": "src/server",
+    "@routes": "src/server/routes", 
+    "@users"  : "src/users"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",

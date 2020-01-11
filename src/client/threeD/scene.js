@@ -1,31 +1,38 @@
+/******************************************************************************
+ * beads
+ * A programming IDE for portables
+ * FranckEinstein90
+ * -------------------------------
+ *
+ *  client side entry point 
+ *
+ *****************************************************************************/
 "use strict"
 
-const THREE = require('three')
 const OrbitControls = require('./orbitControls').OrbitControls
 
 
-const scene = (function (){
-    let _scene, _container, _renderer, _camera, _cameraControls
+const scene =  function ({
+            THREE, 
+            renderer,
+            camera 
+    }){
 
+    let _scene,  _cameraControls
     _scene = new THREE.Scene()
     _scene.background = new THREE.Color( 'skyblue' )
 
    return{
+
      init: function(){
-        _container = document.querySelector('#scene-container')
-
-        _renderer = new THREE.WebGLRenderer( {antialias: true} )
-        _renderer.setSize( _container.clientWidth, _container.clientHeight)
-        _renderer.setPixelRatio( window.devicePixelRatio ) 
-        _container.appendChild( _renderer.domElement )
-
-        scene.initCamera()
+       scene.initCamera()
         scene.initGrid()
         scene.initLights()
         _cameraControls = new OrbitControls( _camera, _renderer.domElement)
         _cameraControls.addEventListener('change', scene.render)
         scene.render()
      }, 
+
      initCamera: function(){
         _camera = new THREE.PerspectiveCamera(45, 
             _container.clientWidth / _container.clientHeight, 1, 10000)
@@ -95,8 +102,20 @@ const scene = (function (){
      }
    }
 
-})()
+}
+
+const Scene = function({
+    THREE, 
+    renderer, 
+    camera
+    }){
+
+    this.renderer = renderer
+    let _scene = new THREE.Scene()
+    _scene.background = new THREE.Color( 'skyblue' )
+
+}
 
 module.exports = {
-    scene
+    Scene
 }

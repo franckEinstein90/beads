@@ -50046,20 +50046,81 @@
 }));
 
 },{}],2:[function(require,module,exports){
+/******************************************************************************
+ * beads
+ * A programming IDE for portables
+ * -------------------------------
+ *
+ *  client side entry point 
+ *
+ *  **************************************************************************/
+
 "use strict"
-const scene = require('./scene').scene
+
+const THREE = require('three')
+const renderer = require('./threeD/renderer').renderer(THREE)
+const Scene = require('./threeD/scene').Scene
+const Camera = require('./threeD/camera').Camera
 
 
 $(function(){
    
-      scene.init()
-      scene.render()
+    let container = document.querySelector('#scene-container')
+
+    let camera = new Camera({ 
+        THREE, 
+        width: container.clientWidth, 
+        height: container.clientHeight
+    })
+
+    renderer.config({ container })
+    container.appendChild( renderer.domElement() )
+
+    let scene = new Scene({
+        THREE, 
+        renderer, 
+        camera
+    })
+    renderer.render(scene)
+
+   //
+   // scene.init()
+   // scene.render()
    
   
-}); 
+}) 
 
 
-},{"./scene":4}],3:[function(require,module,exports){
+},{"./threeD/camera":3,"./threeD/renderer":5,"./threeD/scene":6,"three":1}],3:[function(require,module,exports){
+/******************************************************************************
+ * beads
+ * A programming IDE for portables
+ * -------------------------------
+ *
+ * camera.js 
+ *
+ *  **************************************************************************/
+
+"use strict"
+
+const Camera = function({
+
+    THREE, 
+    width, 
+    height
+
+    }){
+
+        let camera = new THREE.PerspectiveCamera(45, width / height, 1, 10000)
+        camera.position.set( 100, 100, 100)
+        camera.lookAt(0,0,0)
+}
+
+module.exports = {
+    Camera
+}
+
+},{}],4:[function(require,module,exports){
 /**
  * @author qiao / https://github.com/qiao
  * @author mrdoob / http://mrdoob.com
@@ -51254,35 +51315,88 @@ module.exports = {
     OrbitControls, 
     MapControls }
 
-},{"three":1}],4:[function(require,module,exports){
+},{"three":1}],5:[function(require,module,exports){
+/******************************************************************************
+ * beads
+ * A programming IDE for portables
+ * -------------------------------
+ *
+ *  client side entry point 
+ *
+ *  **************************************************************************/
+
 "use strict"
 
-const THREE = require('three')
+const renderer = function( THREE ){
+
+    let _container = null 
+    let _renderer = null
+
+    return {
+        
+        config: function({
+            container
+            }){
+
+            _container = container
+            _renderer = new THREE.WebGLRenderer( {antialias: true} )
+            _renderer.setSize( _container.clientWidth, _container.clientHeight)
+            _renderer.setPixelRatio( window.devicePixelRatio ) 
+        }, 
+
+        render: function({
+            scene, 
+            camera
+        }){
+            _renderer.render(scene, camera)
+        }, 
+
+        domElement : _ => _renderer.domElement        
+        
+    }
+}
+
+
+module.exports = {
+    renderer
+}
+
+},{}],6:[function(require,module,exports){
+/******************************************************************************
+ * beads
+ * A programming IDE for portables
+ * FranckEinstein90
+ * -------------------------------
+ *
+ *  client side entry point 
+ *
+ *****************************************************************************/
+"use strict"
+
 const OrbitControls = require('./orbitControls').OrbitControls
 
 
-const scene = (function (){
-    let _scene, _container, _renderer, _camera, _cameraControls
+const scene =  function ({
+            THREE, 
+            renderer,
+            camera 
+    }){
 
+    let _scene,  _cameraControls
     _scene = new THREE.Scene()
     _scene.background = new THREE.Color( 'skyblue' )
 
    return{
+
      init: function(){
-        _container = document.querySelector('#scene-container')
-
-        _renderer = new THREE.WebGLRenderer( {antialias: true} )
-        _renderer.setSize( _container.clientWidth, _container.clientHeight)
-        _renderer.setPixelRatio( window.devicePixelRatio ) 
-        _container.appendChild( _renderer.domElement )
-
-        scene.initCamera()
+       scene.initCamera()
         scene.initGrid()
         scene.initLights()
         _cameraControls = new OrbitControls( _camera, _renderer.domElement)
         _cameraControls.addEventListener('change', scene.render)
         scene.render()
      }, 
+
      initCamera: function(){
         _camera = new THREE.PerspectiveCamera(45, 
             _container.clientWidth / _container.clientHeight, 1, 10000)
@@ -51352,10 +51466,25 @@ const scene = (function (){
      }
    }
 
-})()
-
-module.exports = {
-    scene
 }
 
-},{"./orbitControls":3,"three":1}]},{},[2]);
+const Scene = function({
+    THREE, 
+    renderer, 
+    camera
+    }){
+
+    this.renderer = renderer
+    let _scene = new THREE.Scene()
+    _scene.background = new THREE.Color( 'skyblue' )
+
+ 
+    this._scene = scene(THREE, renderer)
+    this._scene.init()
+}
+
+module.exports = {
+    Scene
+}
+
+},{"./orbitControls":4}]},{},[2]);
