@@ -9,35 +9,14 @@
 
 "use strict"
 
-const THREE = require('three')
-const renderer = require('./threeD/renderer').renderer(THREE)
-const Scene = require('./threeD/scene').Scene
-const Camera = require('./threeD/camera').Camera
-
-
 $(function(){
-   
-    let container = document.querySelector('#scene-container')
+    const app = {}
+    require('../common/features').addFeatureSystem( app )
+    require('./ui/ui.js').addUiFeature( app )
 
-    let camera = new Camera({ 
-        THREE, 
-        width: container.clientWidth, 
-        height: container.clientHeight
-    })
-
-    renderer.config({ container })
-    container.appendChild( renderer.domElement() )
-
-    let scene = new Scene({
-        THREE, 
-        renderer, 
-        camera
-    })
-    renderer.render(scene)
-
-   //
-   // scene.init()
-   // scene.render()
+    let scene = require('./ui/threeDScene.js').scene
+    scene.init()
+    scene.render()
    
   
 }) 

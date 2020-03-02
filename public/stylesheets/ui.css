@@ -1,0 +1,67 @@
+
+body {
+    background-color: black; 
+}
+
+#topNav, #bottomNav {
+    position: absolute; 
+    background-color: var(--crackle);
+    left: 0; 
+    width: 100%; 
+    z-index: 4; 
+}
+#topNav {
+    position:absolute; 
+    color: black; 
+    top: 0;
+    box-shadow: 2px, 2px; 
+    z-index: 4; 
+}
+
+#topNav A{
+    color: var(--wood);
+    font-family: 'Yeon Sung'; 
+    font-size: 1.4em; 
+    padding-left: 20px;
+    margin-top:-4; 
+}
+    
+#bottomNav {
+    color:black; 
+    box-shadow: 2px, 2px; 
+}
+
+#leftNav {
+    position: absolute; 
+    background-color: orange;  
+    border-right: 1px black inset; 
+    left: 0; 
+    top: 0; 
+    width: 150px; 
+    z-index:3; 
+}
+
+#content {
+    position: absolute; 
+    left:0;
+    background-color: var(--wood); 
+    width:100%; 
+}
+
+
+#left, #right {
+    position : absolute; 
+    text-align: center;
+    font-size: 1.5em; 
+    font-family: 'Indie Flower'; 
+}
+
+#left {
+    background-color: var(--crash); 
+    color : var(--bang);
+}
+
+#right {
+    background-color: var(--wood);
+    color : var(--sun);
+}

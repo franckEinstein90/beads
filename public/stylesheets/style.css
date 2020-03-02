@@ -1,6 +1,2 @@
-#scene-container {
-    position: absolute; 
-    width: 100%; 
-    height: 80%; 
-    background-color:red; 
-}
+@import 'colors.css'; 
+@import 'ui.css';    
