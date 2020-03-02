@@ -50064,6 +50064,8 @@ $(function(){
     require('../common/features').addFeatureSystem( app )
     require('./ui/ui.js').addUiFeature( app )
 
+    require('./users/login').addLoginFeature( app )
+
     let scene = require('./ui/threeDScene.js').scene
     scene.init()
     scene.render()
@@ -50072,7 +50074,7 @@ $(function(){
 }) 
 
 
-},{"../common/features":9,"./ui/threeDScene.js":7,"./ui/ui.js":8}],4:[function(require,module,exports){
+},{"../common/features":11,"./ui/threeDScene.js":8,"./ui/ui.js":9,"./users/login":10}],4:[function(require,module,exports){
 /**
  * @author Daosheng Mu / https://github.com/DaoshengMu/
  * @author mrdoob / http://mrdoob.com/
@@ -54614,6 +54616,38 @@ ColladaLoader.prototype = Object.assign( Object.create( Loader.prototype ), {
 
 module.exports = { ColladaLoader };
 },{"./TGALoader":4,"three":2}],6:[function(require,module,exports){
+/******************************************************************************
+ * beads
+ * A programming IDE for portables
+ * -------------------------------
+ *
+ *  client side entry point 
+ *
+ *  **************************************************************************/
+"use strict"
+
+
+const showModal = ({
+
+    title, 
+    content
+
+  }) =>{
+
+    $('#modalTitle').text( title )
+    $('#modalContent').html( content )
+    document.getElementById('modalWindow').style.display = 'block'
+}
+
+const addModalFeature = function( app ){
+    app.ui.showModal = showModal
+    app.addFeature({label: 'modal-window'})
+}
+
+module.exports = {
+    addModalFeature
+}
+},{}],7:[function(require,module,exports){
 /**
  * @author qiao / https://github.com/qiao
  * @author mrdoob / http://mrdoob.com
@@ -55808,7 +55842,7 @@ module.exports = {
     OrbitControls, 
     MapControls }
 
-},{"three":2}],7:[function(require,module,exports){
+},{"three":2}],8:[function(require,module,exports){
 "use strict"
 
 const THREE = require('three')
@@ -55876,7 +55910,7 @@ module.exports = {
     scene
 }
 
-},{"./colladaLoader":5,"./orbitControls":6,"three":2}],8:[function(require,module,exports){
+},{"./colladaLoader":5,"./orbitControls":7,"three":2}],9:[function(require,module,exports){
 /******************************************************************************
  * 
  ******************************************************************************/
@@ -55943,14 +55977,68 @@ const addUiFeature = app => {
         tag: 'ui', 
         state: 'implemented'
     })
-    return ui
 
+    require('./modal').addModalFeature( app )
+    return ui
 }
 
 module.exports = {
     addUiFeature
 }
-},{}],9:[function(require,module,exports){
+},{"./modal":6}],10:[function(require,module,exports){
+"use strict"
+
+const inputField = ({
+    icon, 
+    placeholder
+}) => [ `<div class="w3-row w3-section">`, 
+            `<div class="w3-col" style="width:50px"><i class="w3-xxlarge ${icon}"></i></div>`, 
+            `<div class="w3-rest">`, 
+            `<input class="w3-input w3-border" name="first" type="text" placeholder="${placeholder}">`, 
+            `</div>`, 
+        `</div>` ].join('')
+
+
+const userNameInput = inputField({
+    icon: 'fa fa-user', 
+    placeholder: 'Member Name or Email'
+})
+
+const emailInput = inputField({
+    icon:           'fa fa-envelope-o', 
+    placeholder:    'Password'
+})
+ 
+const loginForm = [
+    `<form>`, 
+    `${userNameInput}`, 
+    `${emailInput}`,
+    `<button class="w3-button w3-block w3-section w3-ripple w3-padding">Come in</button>`, 
+    `</form>`
+    ].join('')
+
+const addLoginFeature = function( app ){
+
+    app.showLogin = x => app.ui.showModal({
+        title   : 'Login', 
+        content : loginForm 
+    })
+
+    $('#btnLogin').click( event => {
+        event.preventDefault()
+        app.showLogin( )
+    })
+
+    app.addFeature({
+        label: 'login'
+    })
+    return app
+}
+
+module.exports = {
+    addLoginFeature, 
+}
+},{}],11:[function(require,module,exports){
 /******************************************************************************
  * beads
  * A programming IDE for portables

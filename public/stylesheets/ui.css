@@ -19,11 +19,12 @@ body {
 }
 
 #topNav A{
-    color: var(--wood);
-    font-family: 'Yeon Sung'; 
+    color: var(--sun);
+    font-family: 'Original Surfer';
+    vertical-align: 'middle' ;
     font-size: 1.4em; 
     padding-left: 20px;
-    margin-top:-4; 
+    padding-top: 20px; 
 }
     
 #bottomNav {

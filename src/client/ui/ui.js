@@ -64,8 +64,9 @@ const addUiFeature = app => {
         tag: 'ui', 
         state: 'implemented'
     })
-    return ui
 
+    require('./modal').addModalFeature( app )
+    return ui
 }
 
 module.exports = {
