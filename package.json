@@ -3,10 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./bin/www", 
-    "start": "node ./bin/www"
+    "dev": "nodemon app.js", 
+    "start": "node app.js"
   },
   "_moduleAliases": {
+    "@appEngine" : "src/server/appEngine", 
+    "@features" : "src/common/features.js", 
     "@server": "src/server",
     "@routes": "src/server/routes",
     "@users": "src/users"

@@ -1,10 +1,21 @@
 /******************************************************************************
  * beads
- * by
- *  - FranckEinstein90
- *  **************************************************************************/
+ * by FranckEinstein90
+ ******************************************************************************/
+"use strict"
+require('module-alias/register')
 
-const createError = require('http-errors');
+const app = {
+    name: 'beads'
+}
+require('@features').addFeatureSystem( app  )
+.then( app => {
+    app.addFeature({label: "stdout", method: msg => console.log(msg)})
+    return app
+})
+.then( require('@appEngine').addComponent   )
+.then(app => app.appEngine.run())
+/*const createError = require('http-errors');
 
 
 //express set up
@@ -45,3 +56,4 @@ const routingSystem =
       .routingSystem({ app })
 
 module.exports = app
+*/
