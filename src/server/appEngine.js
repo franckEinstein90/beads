@@ -16,7 +16,6 @@ let out = function ( msg ){
 const configureAppEngine = function( app ){
     return new Promise(resolve => {
         return resolve({
-
             run : function() {
                 app.server.start()
                 app.stdout('now running')
@@ -33,6 +32,8 @@ const addComponent = function( app ){
         app.appEngine.addFeature({label: 'run', method: appEngine.run})
         return app
     })
+
+    //express framework
     .then( require('@server/http').addHttpServer )
     .then( app => {
         return app 

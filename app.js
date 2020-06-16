@@ -3,57 +3,38 @@
  * by FranckEinstein90
  ******************************************************************************/
 "use strict"
-require('module-alias/register')
 
-const app = {
-    name: 'beads'
-}
+require('module-alias/register');
+
+const path = require('path');
+const should = require('chai').should(); 
+
+const configureExpressComponent = require('@server/express').configExpress; 
+const setAppRouters = require('@server/routingSystem').setAppRouters; 
+const setAppHttpRoot = require('@server/routingSystem').setHttpRoot;
+
+const app = Object.create({
+    name        : 'beads', 
+    root        : __dirname, 
+    staticFolder: path.join(__dirname, 'public')
+});
+
 require('@features').addFeatureSystem( app  )
 .then( app => {
-    app.addFeature({label: "stdout", method: msg => console.log(msg)})
-    return app
+    app.addFeature({label: "stdout", method: msg => console.log(msg)});
+    setAppRouters(app); 
+    configureExpressComponent( app );
+    setAppHttpRoot(app); 
+    return app; 
 })
-.then( require('@appEngine').addComponent   )
-.then(app => app.appEngine.run())
-/*const createError = require('http-errors');
 
+.then( require('@appEngine').addComponent)
 
-//express set up
-const express = require('express')
-const session = require('express-session')
-
-
-
-
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-
-var app = express();
-
-const viewSystem = require('@server/views/views.js').viewSystem
-viewSystem.configure(__dirname, app)
-
-const setUserSessionSystem = function(){
-    app.use( session ({
-        secret: 'whatdafuckisthat', 
-        cookie: {
-            maxAge: 50 * 40 * 100
-        }   
-    }))
-}
-
-setUserSessionSystem()
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-const routingSystem = 
-      require('@server/routingSystem')
-      .routingSystem({ app })
-
-module.exports = app
-*/
+.then(app => {
+    /* Set up the routes */
+    app.should.have.property('routers'); 
+    app.routers.forEach( path => {
+        app.express.use(path.route, path.router)
+    })   
+    app.server.start(); //start server 
+})

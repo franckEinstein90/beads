@@ -1,33 +1,39 @@
 /******************************************************************************
- * beads
- * by
- *  - FranckEinstein90
- *  **************************************************************************/
+ * 00000000000000000000000000000000
+ *
+ *
+ * ***************************************************************************/
 "use strict"
+/*****************************************************************************/
 
-const express  = require('express')
-const topLevel = require('@routes/topLevel').topLevel
-const login = require('@users/login').login
-
-const routingSystem = function({ app }){
-     
-    let router = express.Router()
-
-    let routes = [ 
-            { route: '/', handler: topLevel },
-            { route: '/login', handler: login }]
-
-    routes.forEach( r => router.get(r.route, r.handler) )
-    app.use('/', router)
-
-    return {
-
- 
-    }
+const setAppRouters = function( app ){
+   app.routers = [];
+   return app;
 }
 
+const _appRootModule = function( app ) {
+   let _router = require('express').Router()
+   _router.get('/', (req,res)=>{
+       let pageData = {
+           title: 'Beads'
+       }
+       res.render('index', pageData)
+   }) 
 
+   return {
+       router: _router 
+   }
+}
+const setHttpRoot = function( app ){
+   app.httpRoot = _appRootModule( app )
+   app.routers.push({
+       route: '/',
+       router: app.httpRoot.router
+   })
+   return app
+}
 
 module.exports = {
-    routingSystem
+  setAppRouters , 
+  setHttpRoot
 }

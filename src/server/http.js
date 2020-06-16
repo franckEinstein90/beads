@@ -62,11 +62,8 @@ const httpServer = function( app ) {
                 ? app.port
                 : normalizePort(process.env.PORT || '3000')
 
-    let _server = http.createServer(
-        app.implements('express')
-        ? app.express
-        : defaultListener
-    )
+    app.express.set('port', app.port); 
+    let _server = http.createServer(app.express); 
     _server.on('error', x => onError(_port))
     _server.on('listening', x => onListening(_server.address()))
 
