@@ -1,6 +1,18 @@
 @import 'colors.css'; 
 @import 'ui.css';    
 
+
+.visual-elt{
+    position:absolute;
+    background-repeat: no-repeat; 
+    background-size: cover;
+    color:white; 
+    overflow:hidden;
+    font-family:'Baloo Chettan 2';
+    animation: appear 4.5s steps(40, end)
+}
+
+
 #modalWindow header {
     background-color : var(--sky);
     color : var(--peaky)

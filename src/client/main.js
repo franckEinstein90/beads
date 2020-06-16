@@ -10,13 +10,13 @@
 "use strict"
 
 $(function(){
-    const app = {}
+    const app = {}; 
     require('../common/features').addFeatureSystem( app )
     require('./ui/main.js').addUiFeature( app )
     require('./users/login').addLoginFeature( app )
-    let scene = require('./ui/threeDScene.js').scene
+/*    let scene = require('./ui/threeDScene.js').scene
     scene.init()
-    scene.render()
+    scene.render()*/
   
 }) 
 

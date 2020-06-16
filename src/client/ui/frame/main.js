@@ -3,6 +3,7 @@
 /*****************************************************************************/
 const cssDef         = require('../utils/cssDef').cssDef ;
 const divPerimeter   = require('../utils/divPerimeter').divPerimeter ; 
+const layoutWindowPanes = require('./layoutWindowPanes').layoutWindowPanes;
 /*****************************************************************************/
 
 let bottomNavCss = cssDef({ 
@@ -110,12 +111,11 @@ const _configureLayout = function( app ){
     contentViewport.height = contentFrame.dimensions.height; 
 
     _configureMargins(contentViewport);
-    layoutVisualElements({
+    layoutWindowPanes({
             app, 
             contentViewport, 
             viewportTemplate: contentFrame
     }); 
-    layoutText( app );
 }
 
 
